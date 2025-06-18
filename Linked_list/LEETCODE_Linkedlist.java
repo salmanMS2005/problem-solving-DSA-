@@ -124,7 +124,7 @@ Do not modify the linked list.
  *     }
  * }
  */
-public class Solution {
+public class Solution142 {
     public ListNode detectCycle(ListNode head) {
         ListNode f = head;
         ListNode s=head;
@@ -144,3 +144,140 @@ public class Solution {
     }
 }
 
+
+
+/*
+LEETCODE : 876. Middle of the Linked List
+
+Given the head of a singly linked list, return the middle node of the linked list.
+
+If there are two middle nodes, return the second middle node.
+*/
+//SOLUTION:
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution876 {
+    public ListNode middleNode(ListNode head) {
+        ListNode s=head;
+        ListNode f=head;
+
+        while(f!=null && f.next!=null){
+            f=f.next.next;
+            s=s.next;
+        }
+        return s;
+    }
+}
+
+
+/*
+LEETCODE : 148. Sort List
+
+Given the head of a linked list, return the list after sorting it in ascending order.
+*/
+//SOLUTION:
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution148 {
+    public ListNode sortList(ListNode head) {
+        if(head==null || head.next==null)    {
+            return head;
+        }
+        ListNode mid=middle(head);
+        ListNode left=sortList(head);
+        ListNode right=sortList(mid);
+
+        return merge(left,right);
+    }
+     public ListNode merge(ListNode list1, ListNode list2) {
+        if(list1==null) return list2;
+        if(list2==null) return list1;
+        ListNode dummyhead = new ListNode();
+        ListNode current=dummyhead;
+        
+        while(list1!=null && list2!=null){
+            if(list1.val < list2.val){
+                current.next=list1;
+                list1=list1.next;
+                current=current.next;
+            }else{
+                current.next=list2;
+                list2=list2.next;
+                current=current.next;
+            }
+        }
+        if(list1!=null) current.next=list1;
+        if(list2!=null) current.next=list2;
+        return dummyhead.next;
+    }
+
+    //spliting the linked list into two equal halfs:
+    public ListNode middle(ListNode head) {
+    ListNode slow = head;
+    ListNode fast = head;
+    ListNode prev = null;
+
+    while (fast != null && fast.next != null) {
+        prev = slow;
+        slow = slow.next;
+        fast = fast.next.next;
+    }
+    if (prev != null) {
+        prev.next = null;
+    }
+    return slow;
+}
+
+}
+
+
+/*
+LEETCODE : 206. Reverse Linked List
+
+Given the head of a singly linked list, reverse the list, and return the reversed list.
+*/
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution206 {
+    public ListNode reverseList(ListNode head) {
+        if(head==null) return head;
+        ListNode prev=null;
+        ListNode pres=head;
+        ListNode next = pres.next;
+        
+        while(pres!=null){
+            pres.next=prev;
+            prev=pres;
+            pres=next;
+            if(next!=null){
+            next=next.next;}
+        }
+        return prev;
+    }
+}
