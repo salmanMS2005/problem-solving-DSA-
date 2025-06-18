@@ -12,7 +12,7 @@ Given the head of a sorted linked list, delete all duplicates such that each ele
  *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
  * }
  */
-class Solution {
+class Solution83 {
     public ListNode deleteDuplicates(ListNode head) {
       ListNode temp=head;
       while(temp!=null && temp.next!=null){
@@ -38,7 +38,7 @@ Return the head of the merged linked list. */
 
 //SOLUTION :
 
-class Solution {
+class Solution21 {
     public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
         if(list1==null) return list2;
         if(list2==null) return list1;
@@ -59,5 +59,42 @@ class Solution {
         if(list1!=null) current.next=list1;
         if(list2!=null) current.next=list2;
         return dummyhead.next;
+    }
+}
+
+
+/*
+141. Linked List Cycle
+
+Given head, the head of a linked list, determine if the linked list has a cycle in it.
+
+There is a cycle in a linked list if there is some node in the list that can be reached again by continuously following the next pointer. Internally, pos is used to denote the index of the node that tail's next pointer is connected to. Note that pos is not passed as a parameter.
+
+Return true if there is a cycle in the linked list. Otherwise, return false.
+*/
+
+//SOLUTION:
+
+/**
+ * Definition for singly-linked list.
+ * class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) {
+ *         val = x;
+ *         next = null;
+ *     }
+ * }
+ */
+public class Solution141 {
+    public boolean hasCycle(ListNode head) {
+        ListNode fast=head;
+        ListNode slow=head;
+        while(fast!=null && fast.next!=null){
+            slow=slow.next;
+            fast=fast.next.next;
+            if(slow==fast) return true;
+        }
+        return false;
     }
 }
