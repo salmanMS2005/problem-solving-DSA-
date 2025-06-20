@@ -350,5 +350,156 @@ class Solution92 {
 
 
 
+/*
+234. Palindrome Linked List
+
+Given the head of a singly linked list, return true if it is a palindrome or false otherwise.
+Example 1:
+Input: head = [1,2,2,1]
+Output: true
+*/
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution234 {
+    public ListNode ReverseList(ListNode head){
+        if(head==null) return head;
+        ListNode prev=null;
+        ListNode pres=head;
+        ListNode next=pres.next;
+
+        while(pres!=null){
+        pres.next=prev;
+        prev=pres;
+        pres=next;
+        if(next!=null){
+            next=next.next;
+        }
+        }
+        return prev;
+    }
+    public ListNode middleNode(ListNode head){
+        ListNode fast=head;
+        ListNode slow=head;
+
+        while(fast!=null && fast.next!=null){
+            slow=slow.next;
+            fast=fast.next.next;
+        }
+        return slow;
+    }
+
+    public boolean isPalindrome(ListNode head) {
+        ListNode mid=middleNode(head);
+        ListNode Secondhead=ReverseList(mid);
+        ListNode Reversehead=Secondhead;
+
+        while(head!=null && Reversehead!=null){
+            if(head.val != Reversehead.val){
+                break;
+            }
+            head=head.next;
+            Reversehead=Reversehead.next;
+        }
+        ReverseList(Reversehead);
+
+        return head==null || Reversehead==null;
+    }
+}
+
+/*
+
+143. Reorder List
+
+You are given the head of a singly linked-list. The list can be represented as:
+
+L0 → L1 → … → Ln - 1 → Ln
+Reorder the list to be on the following form:
+
+L0 → Ln → L1 → Ln - 1 → L2 → Ln - 2 → …
+You may not modify the values in the list's nodes. Only nodes themselves may be changed.
+
+Example 1:
+Input: head = [1,2,3,4]
+Output: [1,4,2,3]
+
+
+SOLUTION:
+*/
+
+
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution143 {
+    public void reorderList(ListNode head) {
+        if(head==null || head.next==null) return;
+
+        ListNode headFirst=head;
+        ListNode mid=middleNode(head);
+        ListNode headSecond=ReverseList(mid);
+        
+        while(headFirst !=null && headSecond!=null ){
+            
+            ListNode temp=headFirst.next;
+            headFirst.next=headSecond;
+            headFirst=temp;
+            
+            temp=headSecond.next;
+            headSecond.next=headFirst;
+            headSecond=temp;
+        }
+        if(headFirst!=null){
+            headFirst.next=null;
+        }
+    }
+
+
+    public ListNode middleNode(ListNode head){
+            ListNode fast=head;
+            ListNode slow=head;
+
+            while(fast!=null && fast.next!=null){
+                slow=slow.next;
+                fast=fast.next.next;
+            }
+            return slow;
+    }
+
+    public ListNode ReverseList(ListNode head){
+        if(head==null) return head;
+        ListNode prev=null;
+        ListNode pres=head;
+        ListNode next=pres.next;
+
+        while(pres!=null){
+        pres.next=prev;
+        prev=pres;
+        pres=next;
+        if(next!=null){
+            next=next.next;
+        }
+        }
+        return prev;
+    }
+        
+}
+
 
 
