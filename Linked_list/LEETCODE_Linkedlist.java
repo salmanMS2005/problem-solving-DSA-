@@ -501,5 +501,128 @@ class Solution143 {
         
 }
 
+/*
+25. Reverse Nodes in k-Group
+Given the head of a linked list, reverse the nodes of the list k at a time, and return the modified list.
+k is a positive integer and is less than or equal to the length of the linked list. 
+If the number of nodes is not a multiple of k then left-out nodes, in the end, should remain as it is.
+
+You may not alter the values in the list's nodes, only nodes themselves may be changed.
+
+Example 1:
+Input: head = [1,2,3,4,5], k = 2
+Output: [2,1,4,3,5]
+
+*/
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution25 {
+    public ListNode reverseKGroup(ListNode head, int k) {
+        if(k<=1 || head==null){
+            return head;
+        }
+        int length=getLength(head);
+        int count=length/k;
+
+        ListNode prev=null;
+        ListNode curr=head;
+
+        while(count>0){
+            ListNode newEnd=curr;
+            ListNode last=prev;
+
+            ListNode next=curr.next;
+            for(int i=0; curr!=null && i<k;i++){
+                curr.next=prev;
+                prev=curr;
+                curr=next;
+                if(next!=null){
+                    next=next.next;
+                }
+            }
+            if(last!=null){
+                last.next=prev;
+            }else{
+                head=prev;
+            }
+            newEnd.next=curr;
+            prev=newEnd;
+
+            if(curr==null){
+                break;
+            }
+            count--;
+        }
+        return head;
+    }
+    
+    public int getLength(ListNode head) {
+		ListNode node = head;
+		int length = 0;
+		while (node != null) {
+			length++;
+			node = node.next;
+		}
+		return length;
+	}
+
+}
+
+
+/*
+61. Rotate List
+Given the head of a linked list, rotate the list to the right by k places.
+
+Example 1:
+Input: head = [1,2,3,4,5], k = 2
+Output: [4,5,1,2,3]
+*/
+
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode rotateRight(ListNode head, int k) {
+        if(head==null|| head.next==null || k<=0){ 
+            return head;
+        }
+        ListNode last=head;
+        int length=1;
+
+        while(last.next!=null){
+            last=last.next;
+            length++;
+        }
+        last.next=head;
+
+        int rotation=k%length;
+        
+        ListNode newLast=head;
+        for(int i=0;i<length-rotation-1;i++){
+            newLast=newLast.next;
+        }
+        head=newLast.next;
+        newLast.next=null;
+
+        return head;
+    }
+}
 
 
