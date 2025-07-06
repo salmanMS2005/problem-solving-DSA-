@@ -598,7 +598,7 @@ Output: [4,5,1,2,3]
  *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
  * }
  */
-class Solution {
+class Solution61 {
     public ListNode rotateRight(ListNode head, int k) {
         if(head==null|| head.next==null || k<=0){ 
             return head;
