@@ -14,6 +14,8 @@ public class Main {
         List<List<Integer>> ans2=subsetduplicates(arr2);
         for(List<Integer> num : ans2){
             System.out.println(num);
+        }
+        permutations("","abc");
     }
 
 static List<List<Integer>> subsets (int[] arr){
@@ -72,3 +74,28 @@ output:
 [2, 2]
 [1, 2, 2]
 */
+
+static void permutations(String p,String str){
+        if(str.isEmpty()){
+            System.out.println(p);
+            return;
+        }
+        char ch= str.charAt(0);
+        for(int i=0;i<=p.length();i++){
+            String f=p.substring(0,i);
+            String l=p.substring(i,p.length());
+            permutations(f+ch+l,str.substring(1));
+        }
+    }
+
+/*
+output:
+cba
+bca
+bac
+cab
+acb
+abc
+*/
+}
+    
