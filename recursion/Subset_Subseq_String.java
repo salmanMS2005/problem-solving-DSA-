@@ -10,6 +10,7 @@ public class Subset_Subseq_String {
         System.out.println();
         String str3="abc";
         seq("",str3);
+        permutations("","abc");
     }
     static void Skip(String ans,String str){
         if(str.isEmpty()){
@@ -45,4 +46,28 @@ public class Subset_Subseq_String {
         seq(ans+ch,str.substring(1));
         seq(ans,str.substring(1));
     }
+
+    
+    static void permutations(String p,String str){
+        if(str.isEmpty()){
+            System.out.println(p);
+            return;
+        }
+        char ch= str.charAt(0);
+        for(int i=0;i<=p.length();i++){
+            String f=p.substring(0,i);
+            String l=p.substring(i,p.length());
+            permutations(f+ch+l,str.substring(1));
+        }
+    }
+
+/*
+output:
+cba
+bca
+bac
+cab
+acb
+abc
+*/
 }
