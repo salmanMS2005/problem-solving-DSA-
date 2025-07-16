@@ -11,6 +11,7 @@ public class Subset_Subseq_String {
         String str3="abc";
         seq("",str3);
         permutations("","abc");
+        System.out.println(letterCombinations("23"));
     }
     static void Skip(String ans,String str){
         if(str.isEmpty()){
@@ -70,4 +71,66 @@ cab
 acb
 abc
 */
+
+//===================================================================================================================================
+
+
+/*
+17. Letter Combinations of a Phone Number
+
+Given a string containing digits from 2-9 inclusive, return all possible letter combinations that the number could represent. Return the answer in any order.
+
+A mapping of digits to letters (just like on the telephone buttons) is given below. Note that 1 does not map to any letters.
+
+Example 1:
+
+Input: digits = "23"
+Output: ["ad","ae","af","bd","be","bf","cd","ce","cf"]
+Example 2:
+
+Input: digits = ""
+Output: []
+Example 3:
+
+Input: digits = "2"
+Output: ["a","b","c"]
+ 
+
+Constraints:
+
+0 <= digits.length <= 4
+digits[i] is a digit in the range ['2', '9'].
+ */
+
+    public static List<String> letterCombinations(String digits) {
+        if(digits.isEmpty()){
+            return new ArrayList<String>();
+        }
+
+        List<String> list= new ArrayList<>();
+        int limit=digits.charAt(0)-'0';
+        int i=(limit-2)*3;
+        if(limit>7){
+            i+=1;
+        }
+        int len=i+3;
+        if(limit==7||limit==9){
+            len+=1;
+        }
+
+        for(;i<len;i++){
+            char ch= (char)(i+'a');
+            List<String> sublist=letterCombinations(digits.substring(1));
+            if(sublist.isEmpty()){
+                list.add(""+ch);
+            }else{
+                for(String str:sublist){
+                    list.add(ch+str);
+                }
+            } 
+        }
+        return list;
+    }
+//===========================================================================================================================
+
 }
