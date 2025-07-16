@@ -12,6 +12,7 @@ public class Subset_Subseq_String {
         seq("",str3);
         permutations("","abc");
         System.out.println(letterCombinations("23"));
+        System.out.println(dices("",4));
     }
     static void Skip(String ans,String str){
         if(str.isEmpty()){
@@ -132,5 +133,22 @@ digits[i] is a digit in the range ['2', '9'].
         return list;
     }
 //===========================================================================================================================
+    public static List<String> dices(String p,int target){
+        if(target==0){
+            List<String> list=new ArrayList<>();
+            list.add(p);
+            return list;
+        }
+        List<String> ans=new ArrayList<>();
+        for(int i=1;i<=6 && i<=target;i++){
+            ans.addAll(dices(p+i,target-i));
+        }
+        return ans;
+    }
 
+/*
+output:
+[1111, 112, 121, 13, 211, 22, 31, 4]
+*/
+//=============================================================================================================================
 }
