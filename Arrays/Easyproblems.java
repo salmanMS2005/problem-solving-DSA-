@@ -7,6 +7,12 @@ public class arrEasy {
         int[] arr={0,0,4,3,0,8,9,9,0};
         zeroAtLast(arr);
         System.out.println(Arrays.toString(arr));
+        int arr1[] =  {2,5,1,3,0};
+        System.out.println(findLargestElement(arr1));
+        int[] arr2 = {1, 2, 4, 6, 7, 5};
+	    int n = arr.length;
+	    getElements(arr2, n);
+
     }
 
   //============================================================================================================================================================================
@@ -49,4 +55,64 @@ Output: [0]
             }
         }
     }
+//======================================================================================================================================
+/*
+Example 1:
+Input: arr[] = {2,5,1,3,0};
+Output: 5
+Explanation: 5 is the largest element in the array. 
+    */
+static int findLargestElement(int arr[]) {
+    int max= arr[0];
+    for (int i = 0; i < arr.length; i++) {
+      if (arr[i] > max) {
+        max= arr[i];
+      }
+    }
+    return max;
+  }
+//======================================================================================================================================
+/*
+Example 1:
+Input: [1,2,4,7,7,5]
+Output: Second Smallest : 2
+Second Largest : 5
+*/
+static private void secondSmallLarge(int[] arr, int n)
+{
+if (n == 0 || n==1)
+	{
+		System.out.print(-1);
+		System.out.print(" ");
+		System.out.print(-1);
+		System.out.print("\n");
+	}
+	int small = Integer.MAX_VALUE;
+	int second_small = Integer.MAX_VALUE;
+	int large = Integer.MIN_VALUE;
+	int second_large = Integer.MIN_VALUE;
+	int i;
+	for (i = 0;i < n;i++)
+	{
+		small = Math.min(small,arr[i]);
+		large = Math.max(large,arr[i]);
+	}
+	for (i = 0;i < n;i++)
+	{
+		if (arr[i] < second_small && arr[i] != small)
+		{
+			second_small = arr[i];
+		}
+		if (arr[i] > second_large && arr[i] != large)
+		{
+			second_large = arr[i];
+		}
+	}
+	System.out.println("Second smallest is "+second_small);
+	System.out.println("Second largest is "+second_large);
+}
+//============================================================================================================================   
+/*
+
+*/
 }
