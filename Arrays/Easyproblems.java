@@ -8,10 +8,12 @@ public class arrEasy {
         zeroAtLast(arr);
         System.out.println(Arrays.toString(arr));
         int arr1[] =  {2,5,1,3,0};
-        System.out.println(findLargestElement(arr1));
+        	System.out.println(findLargestElement(arr1));
         int[] arr2 = {1, 2, 4, 6, 7, 5};
-	    int n = arr.length;
-	    getElements(arr2, n);
+	    	int n = arr.length;
+		getElements(arr2, n);
+	int arr3[] = {1, 2, 3, 4, 5}, n = 5;
+    		System.out.println(isSorted(arr3, n));
 
     }
 
@@ -113,6 +115,19 @@ if (n == 0 || n==1)
 }
 //============================================================================================================================   
 /*
+Input: N = 5, array[] = {1,2,3,4,5}
+Output: True.
+*/
+static boolean isSorted(int arr[], int n) {
+    for (int i = 1; i < n; i++) {
+      if (arr[i] < arr[i - 1])
+        return false;
+    }
+    return true;
+  }
+//==============================================================================================================================
+/*
 
 */
+
 }
