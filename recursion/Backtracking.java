@@ -16,6 +16,10 @@ public class Maze {
         };
         int[][] arr4 =new int[arr3.length][arr3[0].length];
         allDirPaths("",arr3,0,0,arr4,1);
+        //NQueens
+        int n=4;
+        boolean[][] board=new boolean[n][n];
+        System.out.println(NQueens(board,0));
 
   }
 //=====================================================================================================================================
@@ -156,6 +160,69 @@ Right Right Down Left Left Down Right Right
 
 */
 //===================================================================================================================================
+static int NQueens(boolean[][] board,int row){
+        if(row==board.length){
+            display(board);
+            System.out.println();
+            return 1;
+        }
+        int count=0;
+        for(int col=0;col<board[0].length;col++){
+            if(issafe(board,row,col)) {
+                board[row][col] = true;
+                count += NQueens(board, row + 1);
+                board[row][col]=false;
+            }
+        }
+        return count;
+    }
 
+    private static void display(boolean[][] Qboard) {
+        for(boolean[] row: Qboard){
+            for (boolean col: row){
+                if(col) {
+                    System.out.print("Q");
+                }
+                else{
+                    System.out.print("X");
+                }
+            }
+            System.out.println();
+        }
+    }
+    private static boolean issafe(boolean[][] board,int row,int col){
+        for(int i=0;i<row;i++){
+            if(board[i][col]){
+                return false;
+            }
+        }
+        int left=Math.min(row,col);
+        for(int j=1;j<=left;j++){
+            if(board[row-j][col-j]){
+                return false;
+            }
+        }
+        int right=Math.min(row,board.length-col-1);
+        for(int k=1;k<=right;k++){
+            if(board[row-k][col+k]){
+                return false;
+            }
+        }
+        return true;
+
+    }
+/*
+XQXX
+XXXQ
+QXXX
+XXQX
+
+XXQX
+QXXX
+XXXQ
+XQXX
+
+2
+*/
 
 }
