@@ -21,7 +21,7 @@ public class Maze {
         boolean[][] boardQ=new boolean[nQ][nQ];
         System.out.println(NQueens(boardQ,0));
         //NKnights
-        int nK=3;
+        int nK=4;
         boolean[][] boardK=new boolean[nK][nK];
         System.out.println(NKnights(boardK,0,0,4));
 
