@@ -17,9 +17,13 @@ public class Maze {
         int[][] arr4 =new int[arr3.length][arr3[0].length];
         allDirPaths("",arr3,0,0,arr4,1);
         //NQueens
-        int n=4;
-        boolean[][] board=new boolean[n][n];
-        System.out.println(NQueens(board,0));
+        int nQ=4;
+        boolean[][] boardQ=new boolean[nQ][nQ];
+        System.out.println(NQueens(boardQ,0));
+        //NKnights
+        int nK=3;
+        boolean[][] boardK=new boolean[nK][nK];
+        System.out.println(NKnights(boardK,0,0,4));
 
   }
 //=====================================================================================================================================
@@ -224,5 +228,89 @@ XQXX
 
 2
 */
+//=====================================================================================================================================
 
+static int NKnights(boolean[][] board,int row,int col,int knights){
+        if(knights==0){
+            displayknights(board);
+            System.out.println();
+            return 1;
+        }
+
+        if(row==board.length-1 && col==board.length-1){
+            return 0;
+        }
+        if(col==board.length){
+            return NKnights(board,row+1,0,knights);
+        }
+        int count=0;
+        if(issafeknights(board,row,col)){
+            board[row][col]=true;
+            count+=NKnights(board,row,col+1,knights-1);
+            board[row][col]=false;
+        }
+        count+=NKnights(board,row,col+1,knights);
+        return count;
+    }
+    private static boolean issafeknights(boolean[][] board,int row,int col){
+        if(isValid(board,row-2,col+1)){
+            if(board[row-2][col+1]){
+                return false;
+            }
+        }
+        if(isValid(board,row-2,col-1)){
+            if(board[row-2][col-1]){
+                return false;
+            }
+        }
+        if(isValid(board,row-1,col+2)){
+            if(board[row-1][col+2]){
+                return false;
+            }
+        }
+        if(isValid(board,row-1,col-2)){
+            if(board[row-1][col-2]){
+                return false;
+            }
+        }
+        return true;
+    }
+    private static boolean isValid(boolean[][] board,int row,int col){
+        if(row>=0 && row<board.length && col>=0 && col<board.length){
+            return true;
+        }
+        return false;
+    }
+    private static void displayknights(boolean[][] board){
+        for(boolean[] row:board){
+            for(boolean col:row){
+                if(col){
+                    System.out.print("K");
+                }else{
+                    System.out.print("_");
+                }
+            }
+            System.out.println();
+        }
+    }
+/*
+KKKK
+____
+____
+____
+
+KKK_
+_K__
+____
+____
+
+KKK_
+____
+____
+K___
+......etc upto
+272
+
+*/
+//==================================================================================================================================
 }
