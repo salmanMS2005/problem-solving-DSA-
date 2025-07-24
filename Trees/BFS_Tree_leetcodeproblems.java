@@ -349,4 +349,241 @@ class Node {
     }
 }
 //=======================================================================================================================================
+/**
+199. Binary Tree Right Side View
+Given the root of a binary tree, imagine yourself standing on the right side of it, 
+return the values of the nodes you can see ordered from top to bottom.
 
+Example 1:
+Input: root = [1,2,3,null,5,null,4]
+Output: [1,3,4]
+Explanation:
+Example 2:
+Input: root = [1,2,3,4,null,null,null,5]
+Output: [1,3,4,5]
+Explanation:
+Example 3:
+Input: root = [1,null,3]
+Output: [1,3]
+Example 4:
+Input: root = []
+Output: []
+
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public List<Integer> rightSideView(TreeNode root) {
+        List<Integer> result = new ArrayList<>();
+        if(root==null){
+            return result;
+        }
+        Queue<TreeNode> que=new LinkedList<>();
+        que.offer(root);
+        while(!que.isEmpty()){
+            int size=que.size();
+            for(int i=0;i<size;i++){
+                TreeNode node=que.poll();
+                if(i==size-1){
+                    result.add(node.val);
+                }
+                if(node.left!=null){
+                    que.offer(node.left);
+                }
+                if(node.right!=null){
+                    que.offer(node.right);
+                }
+            }
+        }
+        return result;
+    }
+}
+//=============================================================================================================================
+
+/**
+993. Cousins in Binary Tree
+Given the root of a binary tree with unique values and the values of two different nodes of the tree x and y, 
+return true if the nodes corresponding to the values x and y in the tree are cousins, or false otherwise.
+Two nodes of a binary tree are cousins if they have the same depth with different parents.
+Note that in a binary tree, the root node is at the depth 0, and children of each depth k node are at the depth k + 1.
+Example 1:
+Input: root = [1,2,3,4], x = 4, y = 3
+Output: false
+Example 2:
+Input: root = [1,2,3,null,4,null,5], x = 5, y = 4
+Output: true
+Example 3:
+Input: root = [1,2,3,null,4], x = 2, y = 3
+Output: false
+Constraints:
+The number of nodes in the tree is in the range [2, 100].
+1 <= Node.val <= 100
+Each node has a unique value.
+x != y
+x and y are exist in the tree.
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    /*With space complexity o(n)
+    public boolean isCousins(TreeNode root, int x, int y) {
+        if(root==null){
+            return false;
+        }
+        Queue<TreeNode> que=new LinkedList<>();
+        que.offer(root);
+        while(!que.isEmpty()){
+            int size=que.size();
+            ArrayList<Integer> levelvals=new ArrayList<>();
+            for(int i=0;i<size;i++){
+                TreeNode node=que.poll();
+                levelvals.add(node.val);
+                if(node.left!=null){
+                    que.offer(node.left);
+                }
+                if(node.right!=null){
+                    que.offer(node.right);
+                }
+                if(node.left!=null && node.right!=null){
+                    if(node.left.val==x && node.right.val==y || node.left.val==y && node.right.val==x){
+                        return false;
+                    }
+                }
+            }
+            if(levelvals.contains(x) && levelvals.contains(y) && size>1){
+                return true;
+            }
+        }
+        return false;
+    }*/
+
+//With space complexity o(1)
+public boolean isCousins(TreeNode root, int x, int y){
+    if(root==null){
+        return false;
+    }
+    TreeNode xx=findNode(root,x);
+    TreeNode yy=findNode(root,y);
+
+    return( (findLvl(root,xx,0)==findLvl(root,yy,0)) && (!Siblings(root,xx,yy)));
+}
+public TreeNode findNode(TreeNode node,int x){
+    if(node==null){
+        return null;
+    }
+    if(node.val==x){
+        return node;
+    }
+    TreeNode ans=findNode(node.left,x);
+    if(ans!=null){
+        return ans;
+    }
+    return findNode(node.right,x);
+}
+
+public boolean Siblings(TreeNode node,TreeNode xx,TreeNode yy){
+    if(node==null){
+        return false;
+    }
+    if(node.left==xx && node.right==yy ||node.left==yy && node.right==xx){
+        return true;
+    }
+    if(Siblings(node.left,xx,yy)){
+        return true;
+    }
+    return Siblings(node.right,xx,yy);
+}
+public int findLvl(TreeNode node,TreeNode xx,int lvl){
+    if(node==null){
+        return -1;
+    }
+    if(node==xx){
+       return lvl;
+    }
+    int ans=findLvl(node.left,xx,lvl+1);
+    if(ans!=-1){
+        return ans;
+    }
+    return findLvl(node.right,xx,lvl+1);
+}
+//=====================================================================================================================================
+
+/**
+101. Symmetric Tree
+Given the root of a binary tree, check whether it is a mirror of itself (i.e., symmetric around its center).
+Example 1:
+Input: root = [1,2,2,3,4,4,3]
+Output: true
+Example 2:
+Input: root = [1,2,2,null,3,null,3]
+Output: false
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    //Using Recursion
+    /* 
+    public boolean isSymmetric(TreeNode root) {
+        if(root==null){
+            return false;
+        }
+        return isValid(root.left,root.right);
+    }
+    boolean isValid(TreeNode l,TreeNode r){
+        if(l==null && r==null) return true;
+        if(l==null || r==null) return false;
+        return (l.val==r.val) && isValid(l.left,r.right) && isValid(l.right,r.left);
+    }*/
+    //Using brute force bfs
+    public boolean isSymmetric(TreeNode root){
+        Queue<TreeNode> que= new LinkedList<>(); 
+        que.add(root.left);
+        que.add(root.right);
+        while(!que.isEmpty()){
+            TreeNode l=que.poll();
+            TreeNode r=que.poll();
+            if(l==null && r==null) continue;
+            if(l==null || r==null) return false;
+            if(l.val!=r.val) return false;
+            que.offer(l.left);
+            que.offer(r.right);
+            que.offer(l.right);
+            que.offer(r.left);
+        }
+        return true;
+    }
+}
+//===================================================================================================================================
