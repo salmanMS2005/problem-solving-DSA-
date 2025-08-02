@@ -625,4 +625,163 @@ class Solution61 {
     }
 }
 
+//=======================================================================================================================
+/* 
+Sort a linked list of 0s, 1s and 2s
+Difficulty: MediumAccuracy: 60.75%Submissions: 260K+Points: 4Average Time: 30m
+Given the head of a linked list where nodes can contain values 0s, 1s, and 2s only. Your task is to rearrange the list so that all 0s appear at the beginning, followed by all 1s, and all 2s are placed at the end.
 
+Examples:
+
+Input: head = 1 → 2 → 2 → 1 → 2 → 0 → 2 → 2
+
+Output: 0 → 1 → 1 → 2 → 2 → 2 → 2 → 2
+
+Explanation: All the 0s are segregated to the left end of the linked list, 2s to the right end of the list, and 1s in between.
+Input: head = 2 → 2 → 0 → 1
+
+Output: 0 → 1 → 2 → 2
+
+Explanation: After arranging all the 0s, 1s and 2s in the given format, the output will be 0 → 1 → 2 → 2.
+Constraints:
+1 ≤ no. of nodes ≤ 106
+0 ≤ node->data ≤ 2
+
+class Node
+{
+    int data;
+    Node next;
+    Node(int data)
+    {
+        this.data = data;
+        next = null;
+    }
+}*/
+class Solution {
+    static Node segregate(Node head) {
+        // code here
+        if(head==null || head.next==null) return head;
+        
+        Node zeroHead=null;
+        Node oneHead=null;
+        Node twoHead=null;
+        
+        Node zerop=null;
+        Node onep=null;
+        Node twop=null;
+        
+        Node cur=head;
+        
+        while(cur!=null){
+            if(zeroHead==null && cur.data==0){
+                zeroHead=cur;
+                zerop=zeroHead;
+            }
+            
+            else if(oneHead==null && cur.data==1){
+                oneHead=cur;
+                onep=oneHead;
+            }
+            
+            else if(twoHead==null && cur.data==2){
+                twoHead=cur;
+                twop=twoHead;
+            }
+            
+            
+            else if(cur.data==0){
+                zerop.next=cur;
+                zerop=cur;
+            }
+            
+            else if(cur.data==1){
+                onep.next=cur;
+                onep=cur;
+            }
+            
+            else if(cur.data==2){
+                twop.next=cur;
+                twop=cur;
+            }
+            
+            cur=cur.next;
+        }
+        if(zeroHead!=null ){
+            if(oneHead!=null){
+                zerop.next=oneHead;
+            }else{
+                zerop.next=twoHead;
+            }
+        }
+        if(oneHead!= null){
+            onep.next=twoHead;
+        }
+        if(twoHead!=null){
+            twop.next=null;
+        }
+
+        if(zeroHead!=null) return zeroHead;
+        if(oneHead!=null) return oneHead;
+        return twoHead;
+    }
+}
+//=======================================================================================================================
+/**
+328. Odd Even Linked List
+
+Given the head of a singly linked list, group all the nodes with odd indices together followed by the nodes with even indices, and return the reordered list.
+
+The first node is considered odd, and the second node is even, and so on.
+
+Note that the relative order inside both the even and odd groups should remain as it was in the input.
+
+You must solve the problem in O(1) extra space complexity and O(n) time complexity.
+Example 1:
+Input: head = [1,2,3,4,5]
+Output: [1,3,5,2,4]
+Example 2:
+
+
+Input: head = [2,1,3,5,6,4,7]
+Output: [2,3,6,7,1,5,4]
+ 
+
+Constraints:
+
+The number of nodes in the linked list is in the range [0, 104].
+-106 <= Node.val <= 106
+
+
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode oddEvenList(ListNode head) {
+       if(head==null) return null;
+       if(head.next==null) return head;
+
+       ListNode evenHead=head.next;
+       ListNode oddTail=head;
+       
+       ListNode odd=head;
+       ListNode even=head.next;
+
+       while(odd.next!=null && even.next!=null){
+           odd.next=odd.next.next;
+           even.next=even.next.next;
+           
+           odd=odd.next;
+           oddTail=odd;
+           even=even.next;
+       }
+       oddTail.next=evenHead;
+       return head;
+    }
+}
+//=======================================================================================================================
