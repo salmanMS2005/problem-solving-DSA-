@@ -624,3 +624,219 @@ class Solution {
     
 }
 //========================================================================================================================
+/*
+733. Flood Fill
+
+You are given an image represented by an m x n grid of integers image, where image[i][j] represents the pixel value of the image. You are also given three integers sr, sc, and color. Your task is to perform a flood fill on the image starting from the pixel image[sr][sc].
+
+To perform a flood fill:
+
+Begin with the starting pixel and change its color to color.
+Perform the same process for each pixel that is directly adjacent (pixels that share a side with the original pixel, either horizontally or vertically) and shares the same color as the starting pixel.
+Keep repeating this process by checking neighboring pixels of the updated pixels and modifying their color if it matches the original color of the starting pixel.
+The process stops when there are no more adjacent pixels of the original color to update.
+Return the modified image after performing the flood fill.
+
+ 
+
+Example 1:
+
+Input: image = [[1,1,1],[1,1,0],[1,0,1]], sr = 1, sc = 1, color = 2
+
+Output: [[2,2,2],[2,2,0],[2,0,1]]
+
+Explanation:
+
+
+
+From the center of the image with position (sr, sc) = (1, 1) (i.e., the red pixel), all pixels connected by a path of the same color as the starting pixel (i.e., the blue pixels) are colored with the new color.
+
+Note the bottom corner is not colored 2, because it is not horizontally or vertically connected to the starting pixel.
+
+Example 2:
+
+Input: image = [[0,0,0],[0,0,0]], sr = 0, sc = 0, color = 0
+
+Output: [[0,0,0],[0,0,0]]
+
+Explanation:
+
+The starting pixel is already colored with 0, which is the same as the target color. Therefore, no changes are made to the image.
+
+ 
+
+Constraints:
+
+m == image.length
+n == image[i].length
+1 <= m, n <= 50
+0 <= image[i][j], color < 216
+0 <= sr < m
+0 <= sc < n
+*/
+/*
+*********DFS*********************
+class Solution {
+    public int[][] floodFill(int[][] image, int sr, int sc, int color) {
+        int n=image.length;
+        int m=image[0].length;
+        int ogColor=image[sr][sc];
+
+        if(ogColor==color) return image;
+
+        dfs(image,sr,sc,color,n,m,ogColor);
+        return image;
+    }
+    private void dfs(int[][] image,int sr,int sc,int color,int n,int m,int ogColor){
+        if(sr<0 || sr>=n ||sc>=m|| sc<0 ) return;
+
+        if(image[sr][sc]!=ogColor) return;
+
+            image[sr][sc]=color;
+        
+        dfs(image,sr+1,sc,color,n,m,ogColor);
+        dfs(image,sr-1,sc,color,n,m,ogColor);
+        dfs(image,sr,sc+1,color,n,m,ogColor);
+        dfs(image,sr,sc-1,color,n,m,ogColor);
+    }
+}*/
+
+//**********************BFS: */
+class Pair{
+    int x;
+    int y;
+    public Pair(int x,int y){
+        this.x=x;
+        this.y=y;
+    }
+}
+class Solution {
+    public int[][] floodFill(int[][] image, int sr, int sc, int color) {
+        int n=image.length;
+        int m=image[0].length;
+        int ogColor=image[sr][sc];       
+
+        if(ogColor==color) return image;
+
+        Queue<Pair> que=new LinkedList();
+        que.add(new Pair(sr,sc));
+        image[sr][sc]=color;
+
+        int[][] dir =new int[][]{{1,0},{-1,0},{0,1},{0,-1}};
+
+        while(!que.isEmpty()){
+            int size=que.size();
+            while(size-->0){
+                Pair loc=que.poll();
+                int r=loc.x;
+                int c=loc.y;
+                for(int i=0;i<dir.length;i++){
+                    int nr=r+dir[i][0];
+                    int nc=c+dir[i][1];
+                    if(nr>=0 && nc>=0 && nr<n && nc<m){
+                        
+                        if(image[nr][nc]==ogColor){
+                            que.add(new Pair(nr,nc));
+                            image[nr][nc]=color;
+                        }
+                        if(image[nr][nc]!=ogColor){
+                            continue;
+                        }
+                    }
+                }
+            }
+        }
+        return image;
+    }
+}
+//=====================================================================================================
+/*
+1020. Number of Enclaves
+
+You are given an m x n binary matrix grid, where 0 represents a sea cell and 1 represents a land cell.
+
+A move consists of walking from one land cell to another adjacent (4-directionally) land cell or walking off the boundary of the grid.
+
+Return the number of land cells in grid for which we cannot walk off the boundary of the grid in any number of moves.
+
+ 
+
+Example 1:
+
+
+Input: grid = [[0,0,0,0],[1,0,1,0],[0,1,1,0],[0,0,0,0]]
+Output: 3
+Explanation: There are three 1s that are enclosed by 0s, and one 1 that is not enclosed because its on the boundary.
+Example 2:
+
+
+Input: grid = [[0,1,1,0],[0,0,1,0],[0,0,1,0],[0,0,0,0]]
+Output: 0
+Explanation: All 1s are either on the boundary or can reach the boundary.
+ 
+
+Constraints:
+
+m == grid.length
+n == grid[i].length
+1 <= m, n <= 500
+grid[i][j] is either 0 or 1.
+*/
+class Pair{
+    int x;
+    int y;
+    public Pair(int x,int y){
+        this.x=x;
+        this.y=y;
+    }
+}
+class Solution {
+    public int numEnclaves(int[][] grid) {
+        int n=grid.length;
+        int m=grid[0].length;
+        Queue<Pair> que=new LinkedList<>();
+
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(i==0 || i==n-1 || j==0 || j==m-1){
+                    if(grid[i][j]==1){
+                        grid[i][j]=-1;
+                        que.add(new Pair(i,j));
+                    }
+                }
+            }
+        }
+
+        int[][] dir=new int[][]{{1,0},{-1,0},{0,1},{0,-1}};
+
+        while(!que.isEmpty()){
+            int size=que.size();
+            while(size-->0){
+                Pair loc=que.poll();
+                int r=loc.x;
+                int c=loc.y;
+                for(int i=0;i<dir.length;i++){
+                    int nr=r+dir[i][0];
+                    int nc=c+dir[i][1];
+                    if(nr>=0 && nc>=0 && nr<n && nc<m){
+                        if(grid[nr][nc]==1){
+                            grid[nr][nc]=-1;
+                            que.add(new Pair(nr,nc));
+                        }
+                    }
+                }
+            }
+        }
+        int cnt=0;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(grid[i][j]==1){
+                    cnt++;    
+                }
+            }
+        }
+        return cnt;
+    }
+}
+//=============================================================================================
+
