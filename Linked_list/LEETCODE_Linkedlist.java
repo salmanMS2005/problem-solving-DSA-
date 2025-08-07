@@ -785,3 +785,396 @@ class Solution {
     }
 }
 //=======================================================================================================================
+/**
+2. Add Two Numbers
+
+You are given two non-empty linked lists representing two non-negative integers. The digits are stored in reverse order, and each of their nodes contains a single digit. Add the two numbers and return the sum as a linked list.
+
+You may assume the two numbers do not contain any leading zero, except the number 0 itself.
+
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        ListNode t1=l1;
+        ListNode t2=l2;
+        ListNode dummy =new ListNode(-1);
+        ListNode cur=dummy;
+        
+        int carry=0;
+        
+        while(l1!=null || l2!=null || carry==1){
+            int tot=0;
+            if(l1!=null){
+                tot+=l1.val;
+                l1=l1.next;
+            }
+            if(l2!=null){
+                tot+=l2.val;
+                l2=l2.next;
+            }
+            tot+=carry;
+            carry=(tot/10);
+            ListNode node=new ListNode(tot%10);
+            cur.next=node;
+            cur=cur.next;
+        }
+        return dummy.next;
+    }
+}
+//========================================================================================
+/**
+160. Intersection of Two Linked Lists
+
+Given the heads of two singly linked-lists headA and headB, return the node at which the two lists intersect. If the two linked lists have no intersection at all, return null.
+
+For example, the following two linked lists begin to intersect at node c1:
+
+
+The test cases are generated such that there are no cycles anywhere in the entire linked structure.
+
+Note that the linked lists must retain their original structure after the function returns.
+
+Custom Judge:
+
+The inputs to the judge are given as follows (your program is not given these inputs):
+
+intersectVal - The value of the node where the intersection occurs. This is 0 if there is no intersected node.
+listA - The first linked list.
+listB - The second linked list.
+skipA - The number of nodes to skip ahead in listA (starting from the head) to get to the intersected node.
+skipB - The number of nodes to skip ahead in listB (starting from the head) to get to the intersected node.
+The judge will then create the linked structure based on these inputs and pass the two heads, headA and headB to your program. If you correctly return the intersected node, then your solution will be accepted.
+
+ 
+
+Example 1:
+
+
+Input: intersectVal = 8, listA = [4,1,8,4,5], listB = [5,6,1,8,4,5], skipA = 2, skipB = 3
+Output: Intersected at '8'
+Explanation: The intersected node's value is 8 (note that this must not be 0 if the two lists intersect).
+From the head of A, it reads as [4,1,8,4,5]. From the head of B, it reads as [5,6,1,8,4,5]. There are 2 nodes before the intersected node in A; There are 3 nodes before the intersected node in B.
+- Note that the intersected node's value is not 1 because the nodes with value 1 in A and B (2nd node in A and 3rd node in B) are different node references. In other words, they point to two different locations in memory, while the nodes with value 8 in A and B (3rd node in A and 4th node in B) point to the same location in memory.
+
+Constraints:
+
+The number of nodes of listA is in the m.
+The number of nodes of listB is in the n.
+1 <= m, n <= 3 * 104
+1 <= Node.val <= 105
+0 <= skipA <= m
+0 <= skipB <= n
+intersectVal is 0 if listA and listB do not intersect.
+intersectVal == listA[skipA] == listB[skipB] if listA and listB intersect.
+ 
+
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) {
+ *         val = x;
+ *         next = null;
+ *     }
+ * }
+ */
+public class Solution {
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        ListNode cur1=headA;
+        ListNode cur2=headB;
+        int cnt1=0;
+        int cnt2=0;
+        while(cur1 != null){
+            cnt1++;
+            cur1=cur1.next;
+        }
+        while(cur2 != null){
+            cnt2++;
+            cur2=cur2.next;
+        }
+        cur1 = headA;
+        cur2 = headB;
+        
+        int diff=Math.abs(cnt1-cnt2);
+        if(cnt1>cnt2){
+            cur1=mover(cur1,diff);
+        }else{
+           cur2= mover(cur2,diff);
+        }
+        while(cur1 != null && cur2!=null){
+            if(cur1==cur2){
+                return cur1;
+            }
+            cur1=cur1.next;
+            cur2=cur2.next;
+        }
+        return null;
+    }
+    private ListNode mover(ListNode node,int diff){
+        while(diff>0){
+            if(node==null){
+                return null;
+            }else{
+                node=node.next;
+            }
+            diff--;
+        }
+
+        return node;
+    }
+}
+//========================================================================================
+/*
+Add 1 to a Linked List Number
+Difficulty: MediumAccuracy: 31.91%Submissions: 328K+Points: 4Average Time: 20m
+You are given a linked list where each element in the list is a node and have an integer data. You need to add 1 to the number formed by concatinating all the list node numbers together and return the head of the modified linked list. 
+
+Note: The head represents the first element of the given array.
+
+Examples :
+
+Input: LinkedList: 4->5->6
+Output: 457
+
+Explanation: 4->5->6 represents 456 and when 1 is added it becomes 457. 
+Input: LinkedList: 1->2->3
+Output: 124
+ 
+Explanation:  1->2->3 represents 123 and when 1 is added it becomes 124. 
+Expected Time Complexity: O(n)
+Expected Auxiliary Space: O(1)
+
+Constraints:
+1 <= len(list) <= 105
+0 <= list[i] <= 9
+
+
+class Node{
+    int data;
+    Node next;
+
+    Node(int x){
+        data = x;
+        next = null;
+    }
+}
+*/
+
+class Solution {
+    public Node addOne(Node head) {
+        // code here.
+        if(head==null) return head;
+        
+        head=reverse(head);
+        Node cur=head;
+        
+        int carry=1;
+        while(cur!=null){
+            cur.data=cur.data+carry;
+            if(cur.data>9){
+                cur.data=0;
+                carry=1;
+            }else{
+                carry=0;
+            }
+            cur=cur.next;
+        }
+        
+        head=reverse(head);
+        if(carry==1){
+            Node st=new Node(1);
+            st.next=head;
+            return st;
+        }
+        return head;
+        
+    }
+    private Node reverse(Node node){
+        Node prev=null;
+        Node pres=node;
+        Node next=node.next;
+        
+        while(next!=null){
+            pres.next=prev;
+            prev=pres;
+            pres=next;
+            next=next.next;
+        }
+        pres.next=prev;
+        return pres;
+    }
+}
+//========================================================================================
+
+/* Structure of Doubly Linked List
+Delete all occurrences of a given key in a doubly linked list
+Difficulty: MediumAccuracy: 50.04%Submissions: 57K+Points: 4Average Time: 30m
+You are given the head_ref of a doubly Linked List and a Key. Your task is to delete all occurrences of the given key if it is present and return the new DLL.
+
+Example1:
+
+Input: 
+2<->2<->10<->8<->4<->2<->5<->2
+2
+Output: 
+10<->8<->4<->5
+Explanation: 
+All Occurences of 2 have been deleted.
+
+Example2:
+
+Input: 
+9<->1<->3<->4<->5<->1<->8<->4
+9
+Output: 
+1<->3<->4<->5<->1<->8<->4
+Explanation: 
+All Occurences of 9 have been deleted.
+Your Task:
+
+Complete the function void deleteAllOccurOfX(struct Node** head_ref, int key), which takes the reference of the head pointer and an integer value key. Delete all occurrences of the key from the given DLL.
+
+Expected Time Complexity: O(N).
+
+Expected Auxiliary Space: O(1).
+
+Constraints:
+
+1<=Number of Nodes<=105
+
+0<=Node Value <=109
+
+class Node
+{
+    int data;
+    Node next;
+    Node prev;
+    Node(int data)
+    {
+        this.data = data;
+        next = prev = null;
+    }
+}*/
+class Solution {
+    static Node deleteAllOccurOfX(Node head, int x) {
+        // Write your code here
+        Node dummy= new Node();
+        dummy.data=-1;
+        dummy.next=head;
+        head.prev=dummy;
+        
+        Node cur=dummy;
+        Node mainNode=head;
+        Node nextNode=mainNode.next;
+        
+        while(mainNode!=null){
+            if (mainNode.data == x) {
+                cur.next = nextNode;
+                if (nextNode != null) {
+                    nextNode.prev = cur;
+                    nextNode = nextNode.next;
+                } else {
+                    nextNode = null;
+                }
+                mainNode = cur.next;
+            } else {
+                cur = cur.next;
+                mainNode = mainNode.next;
+                if (nextNode != null) {
+                    nextNode = nextNode.next;
+                }
+            }
+        }
+        return dummy.next;
+    }
+}
+//========================================================================================
+/*
+Find pairs with given sum in doubly linked list
+Difficulty: EasyAccuracy: 66.01%Submissions: 91K+Points: 2Average Time: 10m
+Given a sorted doubly linked list of positive distinct elements, the task is to find pairs in a doubly-linked list whose sum is equal to given value target.
+
+Example 1:
+
+Input:  
+1 <-> 2 <-> 4 <-> 5 <-> 6 <-> 8 <-> 9
+target = 7
+Output: (1, 6), (2,5)
+Explanation: We can see that there are two pairs 
+(1, 6) and (2,5) with sum 7.
+ 
+Example 2:
+
+Input: 
+1 <-> 5 <-> 6
+target = 6
+Output: (1,5)
+Explanation: We can see that there is one pairs  (1, 5) with sum 6.
+
+Your Task:
+You don't need to read input or print anything. Your task is to complete the function findPairsWithGivenSum() which takes head node of the doubly linked list and an integer target as input parameter and returns an array of pairs. If there is no such pair return empty array.
+
+Expected Time Complexity: O(N)
+Expected Auxiliary Space: O(1)
+Constraints:
+1 <= N <= 105
+1 <= target <= 105
+
+Definition for singly Link List Node
+class Node
+{
+    int data;
+    Node next,prev;
+
+    Node(int x){
+        data = x;
+        next = null;
+        prev = null;
+    }
+}
+
+You can also use the following for printing the link list.
+Node.printList(Node node);
+*/
+
+class Solution {
+    public static ArrayList<ArrayList<Integer>> findPairsWithGivenSum(int target,
+                                                                      Node head) {
+        // code here
+        Node first=head;
+        Node last= lastnode(first);
+        
+        ArrayList<ArrayList<Integer>> list=new ArrayList<>();
+        
+        while(first!= null && last!=null && first.prev!=last && first != last){
+            if(first.data + last.data == target){
+                list.add(new ArrayList<>(Arrays.asList(first.data,last.data)));
+                first = first.next;
+                last = last.prev;
+            }
+            else if(first.data + last.data > target){
+                last=last.prev;
+            }
+            else if(first.data + last.data < target){
+                first=first.next;
+            }
+        }
+        return list;
+    }
+    private static Node lastnode(Node node){
+        while(node.next!=null){
+            node=node.next;
+        }
+        return node;
+    }
+}
+//=============================================================================================================
+
