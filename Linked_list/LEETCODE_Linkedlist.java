@@ -1177,4 +1177,133 @@ class Solution {
     }
 }
 //=============================================================================================================
+/*
+Remove duplicates from a sorted doubly linked list
+Difficulty: EasyAccuracy: 50.36%Submissions: 68K+Points: 2Average Time: 10m
+Given a doubly linked list of n nodes sorted by values, the task is to remove duplicate nodes present in the linked list.
 
+Example 1:
+
+Input:
+n = 6
+1<->1<->1<->2<->3<->4
+Output:
+1<->2<->3<->4
+Explanation:
+Only the first occurance of node with value 1 is 
+retained, rest nodes with value = 1 are deleted.
+Example 2:
+
+Input:
+n = 7
+1<->2<->2<->3<->3<->4<->4
+Output:
+1<->2<->3<->4
+Explanation:
+Only the first occurance of nodes with values 2,3 and 4 are 
+retained, rest repeating nodes are deleted.
+Your Task:
+You have to complete the method removeDuplicates() which takes 1 argument: the head of the linked list.  Your function should return a pointer to a linked list with no duplicate element.
+
+Constraint:
+1 <= n <= 105
+Expected Time Complexity: O(n)
+Expected Space Complexity: O(1)
+*/
+// User function Template for Java
+
+class Solution {
+    Node removeDuplicates(Node head) {
+        // Code Here.
+        Node cur=head;
+        
+        
+        while(cur!=null && cur.next!=null){
+            Node nextNode=cur.next;
+            while(nextNode!=null && cur.data == nextNode.data){
+                
+                nextNode=nextNode.next;
+                
+            }
+            cur.next=nextNode;
+            
+            if(nextNode !=null) nextNode.prev=cur;
+            
+            cur=cur.next;
+        }
+        return head;
+    }
+}
+//========================================================================================================
+/*
+Flattening a Linked List
+Difficulty: MediumAccuracy: 51.53%Submissions: 192K+Points: 4Average Time: 40m
+Given a linked list containing n head nodes where every node in the linked list contains two pointers:
+(i) next points to the next node in the list.
+(ii) bottom pointer to a sub-linked list where the current node is the head.
+Each of the sub-linked lists nodes and the head nodes are sorted in ascending order based on their data.
+Your task is to flatten the linked list such that all the nodes appear in a single level while maintaining the sorted order.
+
+Note:
+1. ↓ represents the bottom pointer and -> represents the next pointer.
+2. The flattened list will be printed using the bottom pointer instead of the next pointer.
+
+Examples:
+
+Input:
+
+Output: 5-> 7-> 8-> 10 -> 19-> 20-> 22-> 28-> 30-> 35-> 40-> 45-> 50.
+Explanation: 
+Bottom pointer of 5 is pointing to 7.
+Bottom pointer of 7 is pointing to 8.
+Bottom pointer of 8 is pointing to 10 and so on.
+Input:
+ 
+Output: 5-> 7-> 8-> 10-> 19-> 22-> 28-> 30-> 50
+Explanation:
+Bottom pointer of 5 is pointing to 7.
+Bottom pointer of 7 is pointing to 8.
+Bottom pointer of 8 is pointing to 10 and so on.
+Constraints:
+0 <= n <= 100
+1 <= number of nodes in sub-linked list(mi) <= 50
+1 <= node->data <= 104
+*/
+class Solution {
+    // Function to flatten a linked list
+    Node flatten(Node root) {
+        // code here
+        if(root==null || root.next==null) return root;
+        
+        Node mergeHead=flatten(root.next);
+        root=merge(root,mergeHead);
+        return root;
+    }
+    static Node merge(Node t1,Node t2){
+        Node dummy=new Node(-1);
+        Node cur=dummy;
+        
+        while(t1!=null && t2!=null){
+            if(t1.data<t2.data){
+                cur.bottom=t1;
+                cur=t1;
+                t1=t1.bottom;
+            }else{
+                cur.bottom=t2;
+                cur=t2;
+                t2=t2.bottom;
+            }
+            cur.next=null;
+        }
+        if(t1!=null){
+            cur.bottom=t1;
+        }else{
+            cur.bottom=t2;
+        }
+        
+        if(dummy.bottom!=null) dummy.bottom.next=null;
+        
+        return dummy.bottom;
+    }
+}
+//===============================================================================================================
