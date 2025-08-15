@@ -186,3 +186,227 @@ class Solution {
     }
 }
 //==================================================================================================================
+/*
+Generate all binary strings
+Difficulty: MediumAccuracy: 63.9%Submissions: 30K+Points: 4Average Time: 20m
+Given an integer N , Print all binary strings of size N which do not contain consecutive 1s.
+
+A binary string is that string which contains only 0 and 1.
+
+Example 1:
+
+Input:
+N = 3
+Output:
+000 , 001 , 010 , 100 , 101
+Explanation:
+None of the above strings contain consecutive 1s. "110" is not an answer as it has '1's occuring consecutively. 
+Your Task:
+
+You don't need to read input or print anything. Your task is to complete the function generateBinaryStrings() which takes an integer N as input and returns a list of all valid binary strings in lexicographically increasing order.
+
+Expected Time Complexity: O(2N)
+Expected Auxiliary Space: O(N)
+
+Constraints:
+1 <= N <= 20
+*/
+// User function Template for Java
+
+class Solution {
+    public static List<String> generateBinaryStrings(int n) {
+        // code here
+        List<String> ans=new ArrayList<>();
+        helper("",n,ans);
+        return ans;
+    }
+    static void helper(String p,int n,List<String> ans){
+        if(p.length()==n){
+            ans.add(p);
+            return;
+        }
+        
+        helper(p+"0",n,ans);
+        
+        if(p.length()==0 || p.charAt(p.length()-1)=='0'){
+            helper(p+"1",n,ans);
+        }
+    }
+}
+//===============================================================================================
+/*
+78. Subsets
+Solved
+Medium
+Topics
+premium lock icon
+Companies
+Given an integer array nums of unique elements, return all possible subsets (the power set).
+
+The solution set must not contain duplicate subsets. Return the solution in any order.
+
+ 
+
+Example 1:
+
+Input: nums = [1,2,3]
+Output: [[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]]
+Example 2:
+
+Input: nums = [0]
+Output: [[],[0]]
+ 
+
+Constraints:
+
+1 <= nums.length <= 10
+-10 <= nums[i] <= 10
+All the numbers of nums are unique.
+*/
+class Solution {
+    public List<List<Integer>> subsets(int[] nums) {
+        List<List<Integer>> ans=new ArrayList<>();
+        List<Integer> subset= new ArrayList<>();
+        helper(ans,nums,subset,0);
+        return ans;
+    }
+    static void helper(List<List<Integer>> ans,int[] nums,List<Integer> subset,int index){
+        if(index==nums.length){
+            ans.add(new ArrayList<>(subset));
+            return;
+        }
+        subset.add(nums[index]);
+        helper(ans,nums,subset,index+1);
+
+        subset.remove(subset.size()-1);
+        helper(ans,nums,subset,index+1);
+    }
+}
+//=======================================================================================================
+/*
+40. Combination Sum II
+Solved
+Medium
+Topics
+premium lock icon
+Companies
+Given a collection of candidate numbers (candidates) and a target number (target), find all unique combinations in candidates where the candidate numbers sum to target.
+
+Each number in candidates may only be used once in the combination.
+
+Note: The solution set must not contain duplicate combinations.
+
+ 
+
+Example 1:
+
+Input: candidates = [10,1,2,7,6,1,5], target = 8
+Output: 
+[
+[1,1,6],
+[1,2,5],
+[1,7],
+[2,6]
+]
+Example 2:
+
+Input: candidates = [2,5,2,1,2], target = 5
+Output: 
+[
+[1,2,2],
+[5]
+]
+ 
+
+Constraints:
+
+1 <= candidates.length <= 100
+1 <= candidates[i] <= 50
+1 <= target <= 30
+*/
+class Solution {
+    public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+        List<List<Integer>> ans=new ArrayList<>();
+        Arrays.sort(candidates);
+        helper(0,candidates,ans,target,new ArrayList<>());
+        return ans;
+    }
+    static void helper(int ind,int[] arr,List<List<Integer>> ans,int target,ArrayList<Integer> ds){
+        if(target==0){
+            ans.add(new ArrayList<>(ds));
+            return;
+        }
+
+        for(int i=ind;i<arr.length;i++){
+            if(i>ind && arr[i]==arr[i-1]) continue;
+            if(arr[i]>target) break;
+            ds.add(arr[i]);
+            helper(i+1,arr,ans,target-arr[i],ds);
+            ds.remove(ds.size()-1);
+        }
+    }
+}
+//==========================================================================================
+/*
+39. Combination Sum
+Solved
+Medium
+Topics
+premium lock icon
+Companies
+Given an array of distinct integers candidates and a target integer target, return a list of all unique combinations of candidates where the chosen numbers sum to target. You may return the combinations in any order.
+
+The same number may be chosen from candidates an unlimited number of times. Two combinations are unique if the frequency of at least one of the chosen numbers is different.
+
+The test cases are generated such that the number of unique combinations that sum up to target is less than 150 combinations for the given input.
+
+ 
+
+Example 1:
+
+Input: candidates = [2,3,6,7], target = 7
+Output: [[2,2,3],[7]]
+Explanation:
+2 and 3 are candidates, and 2 + 2 + 3 = 7. Note that 2 can be used multiple times.
+7 is a candidate, and 7 = 7.
+These are the only two combinations.
+Example 2:
+
+Input: candidates = [2,3,5], target = 8
+Output: [[2,2,2,2],[2,3,3],[3,5]]
+Example 3:
+
+Input: candidates = [2], target = 1
+Output: []
+ 
+
+Constraints:
+
+1 <= candidates.length <= 30
+2 <= candidates[i] <= 40
+All elements of candidates are distinct.
+1 <= target <= 40
+*/
+class Solution {
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        List<List<Integer>> ans =new ArrayList<>();
+        helper(0,candidates,target,ans,new ArrayList<>());
+        return ans;
+        
+    }
+    static void helper(int ind,int[] arr,int target,List<List<Integer>> ans,List<Integer> ds){
+        if(ind==arr.length){
+            if(target==0){
+                ans.add(new ArrayList<>(ds));
+            }
+            return;
+        }
+        if(arr[ind]<=target){
+            ds.add(arr[ind]);
+            helper(ind,arr,target-arr[ind],ans,ds);
+            ds.remove(ds.size()-1);
+        }
+        helper(ind+1,arr,target,ans,ds);
+    }
+}
+//==============================================================================================================
