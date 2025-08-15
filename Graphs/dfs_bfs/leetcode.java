@@ -839,4 +839,181 @@ class Solution {
     }
 }
 //=============================================================================================
+/*
+1020. Number of Enclaves
+Solved
+Medium
+Topics
+premium lock icon
+Companies
+Hint
+You are given an m x n binary matrix grid, where 0 represents a sea cell and 1 represents a land cell.
 
+A move consists of walking from one land cell to another adjacent (4-directionally) land cell or walking off the boundary of the grid.
+
+Return the number of land cells in grid for which we cannot walk off the boundary of the grid in any number of moves.
+
+ 
+
+Example 1:
+
+
+Input: grid = [[0,0,0,0],[1,0,1,0],[0,1,1,0],[0,0,0,0]]
+Output: 3
+Explanation: There are three 1s that are enclosed by 0s, and one 1 that is not enclosed because its on the boundary.
+Example 2:
+
+
+Input: grid = [[0,1,1,0],[0,0,1,0],[0,0,1,0],[0,0,0,0]]
+Output: 0
+Explanation: All 1s are either on the boundary or can reach the boundary.
+ 
+
+Constraints:
+
+m == grid.length
+n == grid[i].length
+1 <= m, n <= 500
+grid[i][j] is either 0 or 1.
+*/
+class Pair{
+    int x;
+    int y;
+    public Pair(int x,int y){
+        this.x=x;
+        this.y=y;
+    }
+}
+class Solution {
+    public int numEnclaves(int[][] grid) {
+        int n=grid.length;
+        int m=grid[0].length;
+        Queue<Pair> que=new LinkedList<>();
+
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(i==0 || i==n-1 || j==0 || j==m-1){
+                    if(grid[i][j]==1){
+                        grid[i][j]=-1;
+                        que.add(new Pair(i,j));
+                    }
+                }
+            }
+        }
+
+        int[][] dir=new int[][]{{1,0},{-1,0},{0,1},{0,-1}};
+
+        while(!que.isEmpty()){
+            int size=que.size();
+            while(size-->0){
+                Pair loc=que.poll();
+                int r=loc.x;
+                int c=loc.y;
+                for(int i=0;i<dir.length;i++){
+                    int nr=r+dir[i][0];
+                    int nc=c+dir[i][1];
+                    if(nr>=0 && nc>=0 && nr<n && nc<m){
+                        if(grid[nr][nc]==1){
+                            grid[nr][nc]=-1;
+                            que.add(new Pair(nr,nc));
+                        }
+                    }
+                }
+            }
+        }
+        int cnt=0;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(grid[i][j]==1){
+                    cnt++;    
+                }
+            }
+        }
+        return cnt;
+    }
+}
+//=========================================================================================
+/*
+Undirected Graph Cycle
+Difficulty: MediumAccuracy: 30.13%Submissions: 622K+Points: 4Average Time: 20m
+Given an undirected graph with V vertices and E edges, represented as a 2D vector edges[][], where each entry edges[i] = [u, v] denotes an edge between vertices u and v, determine whether the graph contains a cycle or not. The graph can have multiple component.
+
+Examples:
+
+Input: V = 4, E = 4, edges[][] = [[0, 1], [0, 2], [1, 2], [2, 3]]
+Output: true
+Explanation: 
+ 
+1 -> 2 -> 0 -> 1 is a cycle.
+Input: V = 4, E = 3, edges[][] = [[0, 1], [1, 2], [2, 3]]
+Output: false
+Explanation: 
+ 
+No cycle in the graph.
+Constraints:
+1 ≤ V ≤ 105
+1 ≤ E = edges.size() ≤ 105
+*/
+class Pair{
+    int node;
+    int parent;
+    public Pair(int node,int parent){
+        this.node=node;
+        this.parent=parent;
+    }
+}
+class Solution {
+    public boolean isCycle(int V, int[][] edges) {
+        // Code here
+        
+        List<Integer>[] adj = new ArrayList[V];
+        
+        for (int i = 0; i < V; i++) adj[i] = new ArrayList<>();
+
+        for (int[] edge : edges) {
+            int u = edge[0];
+            int v = edge[1];
+            adj[u].add(v);
+            adj[v].add(u); // undirected
+        }
+        
+        boolean[] visited = new boolean[V];
+        
+        for(int i=0;i<V;i++){
+            if(!visited[i]){
+                if(isCycle(i,adj,visited)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    static boolean isCycle(int v,List<Integer>[] adj,boolean[] visited){
+        Queue<Pair> que=new LinkedList<>();
+        que.add(new Pair(v,-1));
+        visited[v]=true;
+        
+        while(!que.isEmpty()){
+            
+            Pair pair=que.poll();
+            int node=pair.node;
+            int parent=pair.parent;
+            
+
+            for(int nextNode : adj[node]){
+                if(visited[nextNode]==false){
+                    visited[nextNode]=true;
+                    que.add(new Pair(nextNode,node));
+                }else if(parent!=nextNode){
+                    return true;
+                }
+            }
+        }
+        return false;
+        
+    }
+}
+//==============================================================================================
+/*
+
+*/
