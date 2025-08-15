@@ -176,3 +176,176 @@ class Solution {
     }
 }
 //================================================================================================================================
+/*
+Max and min element in Binary Tree
+Difficulty: EasyAccuracy: 60.57%Submissions: 39K+Points: 2
+Given a Binary Tree, find maximum and minimum elements in it.
+
+Example:
+
+Input: 
+           
+Output: 11 1
+Explanation: The maximum and minimum element in this binary tree is 11 and 1 respectively.
+Input: 
+           6
+        / \
+       5   8
+      /
+     2
+Output: 8 2
+Explanation: The maximum and minimum element in this binary tree is 8 and 2 respectively.
+Constraints:
+1 <= number of nodes <= 105
+1 <= data of a node <= 105
+
+class Node {
+    int data;
+    Node left, right;
+
+    public Node(int data){
+        this.data = data;
+    }
+}
+*/
+class Solution {
+    public static int findMax(Node root) {
+        // code here
+        if(root==null){
+            return Integer.MIN_VALUE;
+        }
+        return Math.max(root.data,Math.max(findMax(root.left),findMax(root.right)));
+    }
+     
+    public static int findMin(Node root) {
+        
+        // code here
+        if(root==null){
+            return Integer.MAX_VALUE;
+        }
+        return Math.min(root.data,Math.min(findMin(root.left),findMin(root.right)));
+    }
+}
+//==================================================================================================================
+/*
+Ceil in BST
+Difficulty: MediumAccuracy: 62.73%Submissions: 158K+Points: 4Average Time: 30m
+Given a BST and a number X, find Ceil of X.
+Note: Ceil(X) is a number that is either equal to X or is immediately greater than X.
+
+If Ceil could not be found, return -1.
+
+Examples:
+
+Input: root = [5, 1, 7, N, 2, N, N, N, 3], X = 3
+
+Output: 3
+Explanation: We find 3 in BST, so ceil of 3 is 3.
+Input: root = [10, 5, 11, 4, 7, N, N, N, N, N, 8], X = 6
+
+Output: 7
+Explanation: We find 7 in BST, so ceil of 6 is 7.
+Your task:
+You don't need to read input or print anything. Just complete the function findCeil() to implement ceil in BST which returns the ceil of X in the given BST.
+
+Constraints:
+1 <= Number of nodes <= 105
+1 <= Value of nodes<= 105
+
+class Node {
+    int data;
+    Node left, right;
+
+    Node(int data) {
+        this.data = data;
+        left = right = null;
+    }
+} */
+
+class Tree {
+    int findCeil(Node root, int key) {
+        // code here
+        int ceil=-1;
+        while(root!=null){
+            if(root.data==key){
+                ceil=root.data;
+                return ceil;
+            }
+            if(root.data<key){
+                root=root.right;
+            }
+            else{
+                ceil=root.data;
+                root=root.left;
+            }
+        }
+        return ceil;
+    }
+}
+//====================================================================================================
+/*
+Floor in BST
+Difficulty: MediumAccuracy: 51.06%Submissions: 117K+Points: 4Average Time: 20m
+You are given a BST(Binary Search Tree) with n number of nodes and value x. your task is to find the greatest value node of the BST which is smaller than or equal to x.
+Note: when x is smaller than the smallest node of BST then returns -1.
+
+Examples:
+
+Input:
+n = 7               2
+                     \
+                      81
+                    /     \
+                 42       87
+                   \       \
+                    66      90
+                   /
+                 45
+x = 87
+Output: 87
+Explanation: 87 is present in tree so floor will be 87.
+Input:
+n = 4                     6
+                           \
+                            8
+                          /   \
+                        7       9
+x = 11
+Output: 9
+Input:
+n = 4                     6
+                           \
+                            8
+                          /   \
+                        7       9
+x = 5
+Output: -1
+Constraint:
+1 <= Noda data <= 109
+1 <= n <= 105
+
+
+*/
+
+
+
+class Solution {
+    public static int floor(Node root, int x) {
+        // Code here
+        int floor=-1;
+        while(root!=null){
+            if(root.data==x){
+                floor=root.data;
+                return floor;
+            }
+            if(root.data<x){
+                floor=root.data;
+                root=root.right;
+            }else{
+                root=root.left;
+            }
+        }
+        return floor;
+    }
+}
+//==========================================================================================================
