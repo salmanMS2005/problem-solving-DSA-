@@ -168,3 +168,233 @@ class Solution {
     }
 }
 //=================================================================================================================
+/*
+1248. Count Number of Nice Subarrays
+Solved
+Medium
+Topics
+premium lock icon
+Companies
+Hint
+Given an array of integers nums and an integer k. A continuous subarray is called nice if there are k odd numbers on it.
+
+Return the number of nice sub-arrays.
+
+ 
+
+Example 1:
+
+Input: nums = [1,1,2,1,1], k = 3
+Output: 2
+Explanation: The only sub-arrays with 3 odd numbers are [1,1,2,1] and [1,2,1,1].
+Example 2:
+
+Input: nums = [2,4,6], k = 1
+Output: 0
+Explanation: There are no odd numbers in the array.
+Example 3:
+
+Input: nums = [2,2,2,1,2,2,1,2,2,2], k = 2
+Output: 16
+ 
+
+Constraints:
+
+1 <= nums.length <= 50000
+1 <= nums[i] <= 10^5
+1 <= k <= nums.length
+*/
+class Solution {
+    public int numberOfSubarrays(int[] nums, int k) {
+        return helper(nums,k)- helper(nums,k-1);
+    }
+    static int helper(int[] arr,int k){
+        if(k<0) return 0;
+
+        int l=0,r=0;
+        int count=0;
+        int sum=0;
+        while(r<arr.length){
+
+            sum+=(arr[r]%2);
+
+            while(sum>k){
+                sum-=(arr[l]%2);
+                l++;
+            }
+            count+=(r-l)+1;
+            r++;
+        }
+        return count;
+    }
+}
+//===========================================================================================================
+/*
+1358. Number of Substrings Containing All Three Characters
+Solved
+Medium
+Topics
+premium lock icon
+Companies
+Hint
+Given a string s consisting only of characters a, b and c.
+
+Return the number of substrings containing at least one occurrence of all these characters a, b and c.
+
+ 
+
+Example 1:
+
+Input: s = "abcabc"
+Output: 10
+Explanation: The substrings containing at least one occurrence of the characters a, b and c are "abc", "abca", "abcab", "abcabc", "bca", "bcab", "bcabc", "cab", "cabc" and "abc" (again). 
+Example 2:
+
+Input: s = "aaacb"
+Output: 3
+Explanation: The substrings containing at least one occurrence of the characters a, b and c are "aaacb", "aacb" and "acb". 
+Example 3:
+
+Input: s = "abc"
+Output: 1
+ 
+*/
+class Solution {
+    public int numberOfSubstrings(String s) {
+      int[] arr={-1,-1,-1};
+      int cnt=0;
+      for(int r=0;r<s.length();r++)  
+      {
+        arr[s.charAt(r)-'a']=r;
+        if(arr[0]!=-1 && arr[1]!=-1 && arr[2]!=-1 )
+        {
+            cnt+=(1+Math.min(arr[0],Math.min(arr[1],arr[2])));
+        }
+      }
+      return cnt;
+    }
+}
+//================================================================================================
+/*
+930. Binary Subarrays With Sum
+Solved
+Medium
+Topics
+premium lock icon
+Companies
+Given a binary array nums and an integer goal, return the number of non-empty subarrays with a sum goal.
+
+A subarray is a contiguous part of the array.
+
+ 
+
+Example 1:
+
+Input: nums = [1,0,1,0,1], goal = 2
+Output: 4
+Explanation: The 4 subarrays are bolded and underlined below:
+[1,0,1,0,1]
+[1,0,1,0,1]
+[1,0,1,0,1]
+[1,0,1,0,1]
+Example 2:
+
+Input: nums = [0,0,0,0,0], goal = 0
+Output: 15
+ 
+
+Constraints:
+
+1 <= nums.length <= 3 * 104
+nums[i] is either 0 or 1.
+0 <= goal <= nums.length
+*/
+class Solution {
+    public int numSubarraysWithSum(int[] nums, int goal) {
+        return helper(nums,goal) - helper(nums,goal-1);
+    }
+    public int helper(int[] nums, int goal) {
+        if(goal<0) return 0;
+        int l=0,r=0,sum=0;
+        int count=0;
+        while(r<nums.length){
+            sum+=nums[r];
+            while(sum>goal){
+                sum-=nums[l];
+                l++;
+            }
+            
+            count+=(r-l+1);
+            
+            r++;
+        }
+        return count;
+    }
+}
+//====================================================================================
+/*
+1423. Maximum Points You Can Obtain from Cards
+Solved
+Medium
+Topics
+premium lock icon
+Companies
+Hint
+There are several cards arranged in a row, and each card has an associated number of points. The points are given in the integer array cardPoints.
+
+In one step, you can take one card from the beginning or from the end of the row. You have to take exactly k cards.
+
+Your score is the sum of the points of the cards you have taken.
+
+Given the integer array cardPoints and the integer k, return the maximum score you can obtain.
+
+ 
+
+Example 1:
+
+Input: cardPoints = [1,2,3,4,5,6,1], k = 3
+Output: 12
+Explanation: After the first step, your score will always be 1. However, choosing the rightmost card first will maximize your total score. The optimal strategy is to take the three cards on the right, giving a final score of 1 + 6 + 5 = 12.
+Example 2:
+
+Input: cardPoints = [2,2,2], k = 2
+Output: 4
+Explanation: Regardless of which two cards you take, your score will always be 4.
+Example 3:
+
+Input: cardPoints = [9,7,7,9,7,7,9], k = 7
+Output: 55
+Explanation: You have to take all the cards. Your score is the sum of points of all cards.
+ 
+
+Constraints:
+
+1 <= cardPoints.length <= 105
+1 <= cardPoints[i] <= 104
+1 <= k <= cardPoints.length
+*/
+class Solution {
+    public int maxScore(int[] cardPoints, int k) {
+        int l=0,r=0;
+        int lsum=0;
+        int totsum=0;
+        int rsum=0;
+        int maxsum=Integer.MIN_VALUE;
+        for(int i=0;i<k;i++){
+            lsum+=cardPoints[i];
+        }
+        maxsum=lsum;
+        int n=cardPoints.length-1;
+        
+        for(int j=k-1;j>=0;j--){
+            lsum-=cardPoints[j];
+            rsum+=cardPoints[n];
+            totsum=lsum+rsum;
+            n--;
+            maxsum=Math.max(maxsum,totsum);
+            
+        }
+        return maxsum;
+    }
+}
+//=====================================================================================================
