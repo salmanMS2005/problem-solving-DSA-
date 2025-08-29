@@ -398,3 +398,136 @@ class Solution {
     }
 }
 //=====================================================================================================
+/*
+ Longest Substring with At Most K Distinct Characters
+
+Problem statement
+You are given a string 'str' and an integer ‘K’. Your task is to find the length of the largest substring with at most ‘K’ distinct characters.
+
+For example:
+You are given ‘str’ = ‘abbbbbbc’ and ‘K’ = 2, then the substrings that can be formed are [‘abbbbbb’, ‘bbbbbbc’]. Hence the answer is 7.
+Detailed explanation ( Input/output format, Notes, Images )
+Constraints:
+1 <= T <= 10
+1 <= K <= 26
+1 <= |str| <= 10^6
+
+The string str will contain only lowercase alphabets.    
+
+Time Limit: 1 sec
+Note:
+You do not need to print anything. It has already been taken care of. Just implement the function.
+Sample Input 1:
+2
+2
+abbbbbbc
+3
+abcddefg
+Sample Output 1:
+7
+4
+Explanation:
+For the first test case, ‘str’ = ‘abbbbbbc’ and ‘K’ = 2, then the substrings that can be formed are [‘abbbbbb’, ‘bbbbbbc’]. Hence the answer is 7.
+
+For the second test case, ‘str’ = ‘abcddefg’ and ‘K’ = 3, then the substrings that can be formed is [‘cdde’, ‘ddef’]. Hence the answer is 4.
+Sample Input 2:
+2
+3
+aaaaaaaa
+1
+abcefg
+Sample Output 2:
+8   
+1   
+
+
+Hints:
+1. Try to think of a brute force approach.
+2. Try to think of a two-pointer solution.
+*/
+import java.util.*;
+public class Solution {
+
+	public static int kDistinctChars(int k, String str) {
+		// Write your code here
+		int l=0,r=0,maxlen=Integer.MIN_VALUE;
+		HashMap<Character,Integer> map=new HashMap<>();
+		while(r<str.length()){
+            map.put(str.charAt(r),map.getOrDefault(str.charAt(r),0)+1);
+
+			while(map.size()>k){
+				int key=map.get(str.charAt(l));
+				map.put(str.charAt(l),key-1);
+
+				if(map.get(str.charAt(l))==0){
+					map.remove(str.charAt(l));
+				}
+
+				l++;
+			}
+			maxlen=Math.max(r-l+1,maxlen);
+			r++;
+		}
+		return maxlen;
+	}
+
+}
+//=========================================================================================
+/*
+992. Subarrays with K Different Integers
+Solved
+Hard
+Topics
+premium lock icon
+Companies
+Hint
+Given an integer array nums and an integer k, return the number of good subarrays of nums.
+
+A good array is an array where the number of different integers in that array is exactly k.
+
+For example, [1,2,3,1,2] has 3 different integers: 1, 2, and 3.
+A subarray is a contiguous part of an array.
+
+ 
+
+Example 1:
+
+Input: nums = [1,2,1,2,3], k = 2
+Output: 7
+Explanation: Subarrays formed with exactly 2 different integers: [1,2], [2,1], [1,2], [2,3], [1,2,1], [2,1,2], [1,2,1,2]
+Example 2:
+
+Input: nums = [1,2,1,3,4], k = 3
+Output: 3
+Explanation: Subarrays formed with exactly 3 different integers: [1,2,1,3], [2,1,3], [1,3,4].
+ 
+
+Constraints:
+
+1 <= nums.length <= 2 * 104
+1 <= nums[i], k <= nums.length
+*/
+class Solution {
+    public int subarraysWithKDistinct(int[] nums, int k) {
+        return helper(nums,k) - helper(nums,k-1);
+    }
+    private int helper(int[] nums,int k){
+        int l=0,r=0,cnt=0;
+        HashMap<Integer,Integer> map = new HashMap<>();
+        while(r<nums.length){
+            map.put(nums[r],map.getOrDefault(nums[r],0)+1);
+            while(map.size()>k){
+                int key=map.get(nums[l]);
+                map.put(nums[l],key-1);
+                if(map.get(nums[l])==0){
+                    map.remove(nums[l]);
+                }
+                l++;
+            }
+            cnt+=r-l+1;
+            r++;
+        }
+        return cnt;
+    }
+}
+//===============================================================================================================
