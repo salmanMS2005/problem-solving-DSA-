@@ -286,3 +286,394 @@ class Solution {
     }
 }
 //======================================================================================================================================================
+/*
+135. Candy
+
+There are n children standing in a line. Each child is assigned a rating value given in the integer array ratings.
+
+You are giving candies to these children subjected to the following requirements:
+
+Each child must have at least one candy.
+Children with a higher rating get more candies than their neighbors.
+Return the minimum number of candies you need to have to distribute the candies to the children.
+
+ 
+
+Example 1:
+
+Input: ratings = [1,0,2]
+Output: 5
+Explanation: You can allocate to the first, second and third child with 2, 1, 2 candies respectively.
+Example 2:
+
+Input: ratings = [1,2,2]
+Output: 4
+Explanation: You can allocate to the first, second and third child with 1, 2, 1 candies respectively.
+The third child gets 1 candy because it satisfies the above two conditions.
+ 
+
+Constraints:
+
+n == ratings.length
+1 <= n <= 2 * 104
+0 <= ratings[i] <= 2 * 104
+*/
+class Solution {
+    public int candy(int[] ratings) {
+        int sum=1,i=1,peak=1,down=0;
+        int n=ratings.length;
+        while(i<n){
+            if(i<n && ratings[i]==ratings[i-1]){
+                sum+=1;
+                peak=1;
+                down=0;
+                i++;
+                continue;
+            }
+            peak=1;
+            while(i<n && ratings[i]>ratings[i-1]){
+                peak++;
+                sum+=peak;
+                i++;
+            }
+            down=0;
+            while(i<n && ratings[i]<ratings[i-1]){
+                down++;
+                sum+=down;
+                i++;
+            }
+            down++;
+            if(down>peak){
+                sum+=(down-peak);
+            }
+        }
+        return sum;
+    }
+}
+//=======================================================================================================================
+/*
+Fractional Knapsack
+Difficulty: MediumAccuracy: 32.46%Submissions: 358K+Points: 4Average Time: 20m
+Given two arrays, val[] and wt[] , representing the values and weights of items, and an integer capacity representing the maximum weight a knapsack can hold, determine the maximum total value that can be achieved by putting items in the knapsack. You are allowed to break items into fractions if necessary.
+Return the maximum value as a double, rounded to 6 decimal places.
+
+Examples :
+
+Input: val[] = [60, 100, 120], wt[] = [10, 20, 30], capacity = 50
+Output: 240.000000
+Explanation: By taking items of weight 10 and 20 kg and 2/3 fraction of 30 kg. Hence total price will be 60+100+(2/3)(120) = 240
+Input: val[] = [500], wt[] = [30], capacity = 10
+Output: 166.670000
+Explanation: Since the item’s weight exceeds capacity, we take a fraction 10/30 of it, yielding value 166.670000.
+Constraints:
+1 ≤ val.size = wt.size ≤ 105
+1 ≤ capacity ≤ 109
+1 ≤ val[i], wt[i] ≤ 104
+
+
+*/
+
+
+class item{
+    int val;
+    int weight;
+    public item(int val,int weight){
+        this.val=val;
+        this.weight=weight;
+    }
+}
+class itemComparator implements Comparator<item>{
+    @Override
+    public int compare(item a,item b){
+        double r1=(double)a.val/  (double)a.weight;
+        double r2=(double)b.val/ (double)b.weight;
+        if(r1<r2) return 1;
+        else if(r1>r2) return -1;
+        else return 0;
+    }
+}
+class Solution {
+    double fractionalKnapsack(int[] val, int[] wt, int capacity) {
+        // code here
+        item[] arr=new item[val.length];
+        for(int i=0;i<val.length;i++){
+            arr[i]=new item(val[i],wt[i]);
+        }
+        Arrays.sort(arr, new itemComparator());
+        
+        int curwt=0;
+        double finalval=0.0;
+        
+        for(int i=0;i<val.length;i++){
+            if(curwt+arr[i].weight<=capacity){
+                finalval+=arr[i].val;
+                curwt+=arr[i].weight;
+            }else{
+                int rem=capacity-curwt;
+                finalval+=((double)arr[i].val/(double)arr[i].weight) * rem;
+                break;
+            }
+        }
+        return finalval;
+    }
+}
+//========================================================================================================
+/*
+Minimum number of Coins
+Given an infinite supply of each denomination of Indian currency { 1, 2, 5, 10 } and a target value n. Find the minimum number of coins and/or notes needed to make the change for Rs n. 
+
+Examples:
+
+Input: n = 39
+Output: 6
+Explaination: 39 can be formed using 3 coins of 10 rupees, 1 coin of 5 rupees and 2 coins of 2 rupees so minimum coins required are 6.
+Input: n = 121
+Output: 13
+Explaination: 121 can be formed using 12 coins of 10 rupees and 1 coin of 1 rupees.
+Constraints:
+1 ≤ n ≤ 106
+*/
+class Solution {
+    public int findMin(int n) {
+        // code here
+        int[] arr={1,2,5,10};
+        int count=0;
+        
+        for(int i=arr.length-1;i>=0;i--){
+            while(arr[i]<=n){
+                n-=arr[i];
+                count++;
+            }
+        }
+        return count;
+    }
+}
+//=================================================================================================================
+/*
+57. Insert Interval
+
+You are given an array of non-overlapping intervals intervals where intervals[i] = [starti, endi] represent the start and the end of the ith interval and intervals is sorted in ascending order by starti. You are also given an interval newInterval = [start, end] that represents the start and end of another interval.
+
+Insert newInterval into intervals such that intervals is still sorted in ascending order by starti and intervals still does not have any overlapping intervals (merge overlapping intervals if necessary).
+
+Return intervals after the insertion.
+
+Note that you don't need to modify intervals in-place. You can make a new array and return it.
+
+ 
+
+Example 1:
+
+Input: intervals = [[1,3],[6,9]], newInterval = [2,5]
+Output: [[1,5],[6,9]]
+Example 2:
+
+Input: intervals = [[1,2],[3,5],[6,7],[8,10],[12,16]], newInterval = [4,8]
+Output: [[1,2],[3,10],[12,16]]
+Explanation: Because the new interval [4,8] overlaps with [3,5],[6,7],[8,10].
+ 
+
+Constraints:
+
+0 <= intervals.length <= 104
+intervals[i].length == 2
+0 <= starti <= endi <= 105
+intervals is sorted by starti in ascending order.
+newInterval.length == 2
+0 <= start <= end <= 105
+*/
+class Solution {
+    public int[][] insert(int[][] intervals, int[] newInterval) {
+        int n=intervals.length;
+
+        ArrayList<int[]> res=new ArrayList<>();
+        int i=0;
+        while(i<n && intervals[i][1] < newInterval[0]){
+            res.add(intervals[i]);
+            i++;
+        }
+        while(i<n && intervals[i][0] <= newInterval[1]){
+            newInterval[0]=Math.min(intervals[i][0],newInterval[0]);
+            newInterval[1]=Math.max(intervals[i][1],newInterval[1]);
+            i++;
+        }
+        res.add(newInterval);
+        while(i<n && intervals[i][1]>newInterval[0]){
+            res.add(intervals[i]);
+            i++;
+        }
+        return res.toArray(new int[res.size()][2]);
+    }
+}
+//================================================================================================================
+/*
+56. Merge Intervals
+
+Given an array of intervals where intervals[i] = [starti, endi], merge all overlapping intervals, and return an array of the non-overlapping intervals that cover all the intervals in the input.
+
+
+Example 1:
+
+Input: intervals = [[1,3],[2,6],[8,10],[15,18]]
+Output: [[1,6],[8,10],[15,18]]
+Explanation: Since intervals [1,3] and [2,6] overlap, merge them into [1,6].
+Example 2:
+
+Input: intervals = [[1,4],[4,5]]
+Output: [[1,5]]
+Explanation: Intervals [1,4] and [4,5] are considered overlapping.
+ 
+
+Constraints:
+
+1 <= intervals.length <= 104
+intervals[i].length == 2
+0 <= starti <= endi <= 104
+*/
+class Solution {
+    public int[][] merge(int[][] intervals) {
+        int n=intervals.length;
+        List<int[]> ans= new ArrayList<>();
+
+        Arrays.sort(intervals,new Comparator<int[]>(){
+            public int compare(int[] a,int[] b){
+                return a[0]-b[0];
+            }
+        });
+        
+        int start = intervals[0][0];
+        int end = intervals[0][1];
+        for(int i=1;i<n;i++)
+        {
+            if( intervals[i][0]<= end)
+            {
+                end=Math.max(end,intervals[i][1]);
+            }
+            else
+            {
+                ans.add(new int[]{start,end});
+                start=intervals[i][0];
+                end=intervals[i][1];
+            }
+        }
+        ans.add(new int[]{start,end});
+        return ans.toArray(new int[ans.size()][]);
+    }
+}
+//=====================================================================================================================
+/*
+56. Merge Intervals
+
+Given an array of intervals intervals where intervals[i] = [starti, endi], return the minimum number of intervals you need to remove to make the rest of the intervals non-overlapping.
+
+Note that intervals which only touch at a point are non-overlapping. For example, [1, 2] and [2, 3] are non-overlapping.
+
+ 
+
+Example 1:
+
+Input: intervals = [[1,2],[2,3],[3,4],[1,3]]
+Output: 1
+Explanation: [1,3] can be removed and the rest of the intervals are non-overlapping.
+Example 2:
+
+Input: intervals = [[1,2],[1,2],[1,2]]
+Output: 2
+Explanation: You need to remove two [1,2] to make the rest of the intervals non-overlapping.
+Example 3:
+
+Input: intervals = [[1,2],[2,3]]
+Output: 0
+Explanation: You don't need to remove any of the intervals since they're already non-overlapping.
+ 
+
+Constraints:
+
+1 <= intervals.length <= 105
+intervals[i].length == 2
+-5 * 104 <= starti < endi <= 5 * 104
+*/
+class Solution {
+    public int[][] merge(int[][] intervals) {
+        int n=intervals.length;
+        List<int[]> ans= new ArrayList<>();
+
+        Arrays.sort(intervals,new Comparator<int[]>(){
+            public int compare(int[] a,int[] b){
+                return a[0]-b[0];
+            }
+        });
+        
+        int start = intervals[0][0];
+        int end = intervals[0][1];
+        for(int i=1;i<n;i++)
+        {
+            if( intervals[i][0]<= end)
+            {
+                end=Math.max(end,intervals[i][1]);
+            }
+            else
+            {
+                ans.add(new int[]{start,end});
+                start=intervals[i][0];
+                end=intervals[i][1];
+            }
+        }
+        ans.add(new int[]{start,end});
+        return ans.toArray(new int[ans.size()][]);
+    }
+}
+//==============================================================================================================
+/*
+435. Non-overlapping Intervals
+
+Given an array of intervals intervals where intervals[i] = [starti, endi], return the minimum number of intervals you need to remove to make the rest of the intervals non-overlapping.
+
+Note that intervals which only touch at a point are non-overlapping. For example, [1, 2] and [2, 3] are non-overlapping.
+
+
+Example 1:
+
+Input: intervals = [[1,2],[2,3],[3,4],[1,3]]
+Output: 1
+Explanation: [1,3] can be removed and the rest of the intervals are non-overlapping.
+Example 2:
+
+Input: intervals = [[1,2],[1,2],[1,2]]
+Output: 2
+Explanation: You need to remove two [1,2] to make the rest of the intervals non-overlapping.
+Example 3:
+
+Input: intervals = [[1,2],[2,3]]
+Output: 0
+Explanation: You don't need to remove any of the intervals since they're already non-overlapping.
+ 
+
+Constraints:
+
+1 <= intervals.length <= 105
+intervals[i].length == 2
+-5 * 104 <= starti < endi <= 5 * 104
+*/
+
+class Solution {
+    public int eraseOverlapIntervals(int[][] intervals) {
+        int n=intervals.length;
+        int ans=0;
+        Arrays.sort(intervals,new Comparator<int[]>(){
+            public int compare(int[] a,int[] b){
+                return a[1]-b[1];
+            }
+        });
+        int lastend=intervals[0][1];
+        for(int i=1;i<n;i++){
+            if(intervals[i][0]<lastend){
+                ans++;
+            }else{
+                lastend=intervals[i][1];
+            }
+        }
+        return ans;
+    }
+}
+//===============================================================================================================================
